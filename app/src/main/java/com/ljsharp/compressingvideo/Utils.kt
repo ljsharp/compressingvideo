@@ -1,4 +1,4 @@
-package com.abedelazizshe.lightcompressor
+package com.ljsharp.compressingvideo
 
 import android.content.Context
 import android.database.Cursor
@@ -120,4 +120,8 @@ private fun copy(`in`: InputStream, out: OutputStream) {
         out.write(buffer, 0, bytesRead)
     }
     out.flush()
+}
+
+fun uploadVideo(context: Context, path: String) {
+
 }

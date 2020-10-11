@@ -14,8 +14,8 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.abedelazizshe.lightcompressor.getFileSize
-import com.abedelazizshe.lightcompressor.getMediaPath
+//import com.ljsharp.compressingvideo.getFileSize
+//import com.ljsharp.compressingvideo.getMediaPath
 import com.abedelazizshe.lightcompressorlibrary.CompressionListener
 import com.abedelazizshe.lightcompressorlibrary.VideoCompressor
 import com.abedelazizshe.lightcompressorlibrary.VideoQuality
@@ -72,7 +72,8 @@ class MainActivity : AppCompatActivity() {
     @SuppressLint("SetTextI18n")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
 
-        mainContents.visibility = View.GONE
+//        mainContents.visibility = View.GONE
+        upload_video.visibility = View.GONE
         timeTaken.text = ""
         newSize.text = ""
 
@@ -80,7 +81,7 @@ class MainActivity : AppCompatActivity() {
             if (requestCode == REQUEST_SELECT_VIDEO) {
                 if (data != null && data.data != null) {
                     val uri = data.data
-
+                    newPath.text = uri?.let { getPathFromUri(this, it) }
                     uri?.let {
                         mainContents.visibility = View.VISIBLE
                         Glide.with(applicationContext).load(uri).into(videoImage)
@@ -121,9 +122,11 @@ class MainActivity : AppCompatActivity() {
 
                                             override fun onSuccess() {
                                                 val newSizeValue = desFile.length()
+                                                val newPathValue = desFile.absolutePath
 
                                                 newSize.text =
                                                         "Size after compression: ${getFileSize(newSizeValue)}"
+                                                newPath.text = "New Path after compression: $newPathValue"
 
                                                 time = System.currentTimeMillis() - time
                                                 timeTaken.text =
@@ -150,8 +153,8 @@ class MainActivity : AppCompatActivity() {
                                             }
                                         },
                                         VideoQuality.MEDIUM,
-                                        isMinBitRateEnabled = true,
-                                        keepOriginalResolution = false,
+                                        isMinBitRateEnabled = false,
+                                        keepOriginalResolution = true,
                                 )
                             }
                         }

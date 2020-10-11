@@ -104,6 +104,16 @@
             android:textSize="16sp"
             tools:text="Duration" />
 
+        <TextView
+            android:id="@+id/newPath"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/timeTaken"
+            android:layout_marginTop="8dp"
+            android:textColor="@color/colorBlack"
+            android:textSize="16sp"
+            tools:text="New Path after compression:" />
+
     </RelativeLayout>
 
 
@@ -118,6 +128,19 @@
         android:textColor="@color/colorWhite"
         app:backgroundTint="@color/colorBrown"
         app:icon="@drawable/ic_video_library_white_24dp"
+        app:iconTint="@color/colorWhite" />
+
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/upload_video"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|start"
+        android:layout_margin="@dimen/fab_margin"
+        android:text="@string/upload_video"
+        android:textAllCaps="false"
+        android:textColor="@color/colorWhite"
+        app:backgroundTint="@color/colorDeepGreen"
+        app:icon="@drawable/ic_baseline_cloud_upload_24"
         app:iconTint="@color/colorWhite" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

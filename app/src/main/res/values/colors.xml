@@ -6,5 +6,6 @@
     <color name="colorBrown">#A52A2A</color>
     <color name="colorWhite">#FFFFFF</color>
     <color name="colorBlack">#000000</color>
+    <color name="colorDeepGreen">#14615E</color>
     <color name="colorBackground">#F5F5F6</color>
 </resources>
