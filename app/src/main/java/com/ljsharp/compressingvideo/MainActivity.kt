@@ -20,6 +20,7 @@ import com.abedelazizshe.lightcompressorlibrary.CompressionListener
 import com.abedelazizshe.lightcompressorlibrary.VideoCompressor
 import com.abedelazizshe.lightcompressorlibrary.VideoQuality
 import com.bumptech.glide.Glide
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
 import kotlinx.coroutines.GlobalScope
@@ -30,10 +31,6 @@ import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.io.IOException
 
-/**
- * Created by AbedElaziz Shehadeh on 26 Jan, 2020
- * elaziz.shehadeh@gmail.com
- */
 class MainActivity : AppCompatActivity() {
 
     companion object {
@@ -41,15 +38,27 @@ class MainActivity : AppCompatActivity() {
     }
 
     private lateinit var path: String
+    private lateinit var extension: String
+    private lateinit var uploadVideo: ExtendedFloatingActionButton
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         setReadStoragePermission()
-
+        uploadVideo = findViewById(R.id.upload_video)
+        uploadVideo.visibility = View.GONE
         fab.setOnClickListener {
             pickVideo()
+        }
+
+        uploadVideo.setOnClickListener {
+            if (txtFileName.text != null) {
+                UploadUtility(this).uploadFile(path, txtFileName?.text.toString() + extension)
+            }
+            else {
+                UploadUtility(this).uploadFile(path)
+            }
         }
 
         cancel.setOnClickListener {
@@ -72,8 +81,7 @@ class MainActivity : AppCompatActivity() {
     @SuppressLint("SetTextI18n")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
 
-//        mainContents.visibility = View.GONE
-        upload_video.visibility = View.GONE
+        mainContents.visibility = View.GONE
         timeTaken.text = ""
         newSize.text = ""
 
@@ -82,6 +90,7 @@ class MainActivity : AppCompatActivity() {
                 if (data != null && data.data != null) {
                     val uri = data.data
                     newPath.text = uri?.let { getPathFromUri(this, it) }
+
                     uri?.let {
                         mainContents.visibility = View.VISIBLE
                         Glide.with(applicationContext).load(uri).into(videoImage)
@@ -90,11 +99,12 @@ class MainActivity : AppCompatActivity() {
                             // run in background as it can take a long time if the video is big,
                             // this implementation is not the best way to do it,
                             // todo(abed): improve threading
+
                             val job = async { getMediaPath(applicationContext, uri) }
                             path = job.await()
 
                             val desFile = saveVideoFile(path)
-
+                            extension = getVideoExtension(uri)
                             desFile?.let {
                                 var time = 0L
                                 VideoCompressor.start(
@@ -122,7 +132,7 @@ class MainActivity : AppCompatActivity() {
 
                                             override fun onSuccess() {
                                                 val newSizeValue = desFile.length()
-                                                val newPathValue = desFile.absolutePath
+                                                val newPathValue = desFile.path.toString()
 
                                                 newSize.text =
                                                         "Size after compression: ${getFileSize(newSizeValue)}"
@@ -136,6 +146,7 @@ class MainActivity : AppCompatActivity() {
 
                                                 Looper.myLooper()?.let {
                                                     Handler(it).postDelayed({
+                                                        uploadVideo.visibility = View.VISIBLE
                                                         progress.visibility = View.GONE
                                                         progressBar.visibility = View.GONE
                                                     }, 50)

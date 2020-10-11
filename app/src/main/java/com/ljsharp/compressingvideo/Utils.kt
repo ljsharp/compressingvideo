@@ -96,7 +96,7 @@ fun getPathFromUri(context: Context, uri: Uri): String {
 
 /** @return extension of video with dot, or default .mp4 if it none.
  */
-private fun getVideoExtension(uriVideo: Uri): String {
+fun getVideoExtension(uriVideo: Uri): String {
     var extension: String? = null
     try {
         val imagePath = uriVideo.path
@@ -120,8 +120,4 @@ private fun copy(`in`: InputStream, out: OutputStream) {
         out.write(buffer, 0, bytesRead)
     }
     out.flush()
-}
-
-fun uploadVideo(context: Context, path: String) {
-
 }
